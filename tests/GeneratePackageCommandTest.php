@@ -16,7 +16,7 @@ class GeneratePackageCommandTest extends TestCase
     {
 
         $commandTester = $this->executeCommand([
-            'name' => 'dummy-package'
+            'name' => 'dummy/dummy-package'
         ]);
 
         // the output of the command in the console
@@ -30,6 +30,19 @@ class GeneratePackageCommandTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->executeCommand([]);
     }
+
+	/** @test */
+	public function command_fails_if_name_not_valid ()
+	{
+		$commandTester = $this->executeCommand([
+			'name' => 'dummy/dummy-package/test'
+		]);
+
+		$output = $commandTester->getDisplay();
+		$this->assertContains('dummy/dummy-package/test is not a valid name', $output);
+		$this->assertNotContains('Generating Laravel Package', $output);
+
+	}
 
     /**
      * helper to execute the command for given options

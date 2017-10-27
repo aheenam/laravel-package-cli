@@ -128,6 +128,7 @@ class PackageGenerator
         $this->generateTestFiles();
 
         // generate composer.json
+	    $this->generateComposerJson();
 
     }
 
