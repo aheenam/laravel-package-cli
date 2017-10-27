@@ -80,10 +80,10 @@ class PackageGenerator
      * @param string $path
      * @param array $packageInfo
      */
-    public function __construct(FilesystemInterface $filesystem, $path = '', $packageInfo)
+    public function __construct(FilesystemInterface $filesystem, $path = '/', $packageInfo)
     {
         $this->filesystem = $filesystem;
-        $this->path = $path . '/';
+        $this->path = $path;
         $this->packageName = $packageInfo['name'];
         $this->vendorName = $packageInfo['vendor'];
 
