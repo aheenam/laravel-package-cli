@@ -78,14 +78,14 @@ class PackageGenerator
      * PackageGenerator constructor.
      * @param FilesystemInterface $filesystem
      * @param string $path
-     * @param array $packageInfo
+     * @param string $packageName
      */
-    public function __construct(FilesystemInterface $filesystem, $path = '/', $packageInfo)
+    public function __construct(FilesystemInterface $filesystem, $path = '/', $packageName)
     {
         $this->filesystem = $filesystem;
         $this->path = $path;
-        $this->packageName = $packageInfo['name'];
-        $this->vendorName = $packageInfo['vendor'];
+
+        list($this->vendorName, $this->packageName) = $this->resolvePackageName($packageName);
 
         $this->packagePath = $this->path . $this->packageName . '/';
 
@@ -270,6 +270,21 @@ class PackageGenerator
             )
         );
 
+    }
+
+    /**
+     * @param string $packageName
+     * @return array 
+     */
+    protected function resolvePackageName($packageName) 
+    {
+        $packageParts = explode('/', $packageName);
+        
+        if ( count($packageParts) !== 2 ) {
+            throw new \Aheenam\LaravelPackageCli\InvalidPackageNameException();
+        }
+
+        return $packageParts;
     }
 
 }

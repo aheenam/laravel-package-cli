@@ -35,24 +35,19 @@ class GeneratePackageCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
 	    $io = new SymfonyStyle($input, $output);
-	    $packageName = $input->getArgument('name');
-	    $packageParts = explode('/', $packageName);
+		
+		$packageName = $input->getArgument('name');
 
-	    if ( count($packageParts) !== 2 ) {
-	    	$io->error("$packageName is not a valid name!");
-	    	return null;
-	    }
+		try {
+			$filesystem = new Filesystem(new Local(getcwd()));
+			$generator = new PackageGenerator($filesystem, '/', $packageName);
+		} catch (InvalidPackageNameException $e) {
+			$io->error("$packageName is not a valid package name");
+			return null;
+		}
 
-        $io->title('Generating Laravel Package');
-
-	    $filesystem = new Filesystem(new Local(getcwd()));
-	    $packageInfo = [
-		    'name' => $packageParts[1],
-		    'vendor' => $packageParts[0]
-	    ];
-
-	    (new PackageGenerator($filesystem, '/', $packageInfo))
-		    ->generate();
+		$io->title('Generating Laravel Package');
+		$generator->generate();
 
     }
 

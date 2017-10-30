@@ -39,7 +39,7 @@ class GeneratePackageCommandTest extends TestCase
 		]);
 
 		$output = $commandTester->getDisplay();
-		$this->assertContains('dummy/dummy-package/test is not a valid name', $output);
+		$this->assertContains('dummy/dummy-package/test is not a valid package name', $output);
 		$this->assertNotContains('Generating Laravel Package', $output);
 
 	}

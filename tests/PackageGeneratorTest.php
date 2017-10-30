@@ -6,6 +6,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
+use Aheenam\LaravelPackageCli\InvalidPackageNameException;
 
 class PackageGeneratorTest extends TestCase
 {
@@ -13,11 +14,22 @@ class PackageGeneratorTest extends TestCase
     use MatchesSnapshots;
 
     /** @test */
+    public function it_throws_exception_on_name_validation_fail ()
+    {
+        $this->expectException(InvalidPackageNameException::class);
+        $filesystem = new Filesystem(new MemoryAdapter);
+
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package/asdf'))
+            ->generate();
+
+    }
+
+    /** @test */
     public function it_generates_base_files ()
     {
         $filesystem = new Filesystem(new MemoryAdapter);
 
-        (new PackageGenerator($filesystem, '/', ['name' => 'dummy-package', 'vendor' => 'dummy']))
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateBaseFiles();
 
         $this->assertHasFile($filesystem, 'dummy-package');
@@ -41,7 +53,7 @@ class PackageGeneratorTest extends TestCase
     {
         $filesystem = new Filesystem(new MemoryAdapter);
 
-        (new PackageGenerator($filesystem, '/', ['name' => 'dummy-package', 'vendor' => 'dummy']))
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateServiceProvider();
 
         $this->assertHasFile($filesystem, 'dummy-package/src/DummyPackageServiceProvider.php');
@@ -55,7 +67,7 @@ class PackageGeneratorTest extends TestCase
     {
         $filesystem = new Filesystem(new MemoryAdapter);
 
-        (new PackageGenerator($filesystem, '/', ['name' => 'dummy-package', 'vendor' => 'dummy']))
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateTestFiles();
 
         $this->assertHasFile($filesystem, 'dummy-package/tests');
@@ -76,7 +88,7 @@ class PackageGeneratorTest extends TestCase
     {
         $filesystem = new Filesystem(new MemoryAdapter);
 
-        (new PackageGenerator($filesystem, '/', ['name' => 'dummy-package', 'vendor' => 'dummy']))
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateComposerJson();
 
         $this->assertHasFile($filesystem, 'dummy-package/composer.json');
