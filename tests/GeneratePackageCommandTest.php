@@ -39,6 +39,44 @@ class GeneratePackageCommandTest extends TestCase
         $this->executeCommand([]);
     }
 
+    /** @test */
+    public function command_fails_if_directory_already_exists ()
+    {
+
+        // fake dir
+        (new Filesystem(new Local(__DIR__ . './../')))
+            ->createDir('dummy-package');
+
+        $commandTester = $this->executeCommand([
+            'name' => 'dummy/dummy-package'
+        ]);
+
+        // the output of the command in the console
+        $output = $commandTester->getDisplay();
+		$this->assertContains('dummy-package already exists', $output);
+		$this->assertNotContains('Generating Laravel Package', $output);
+    }
+
+    /** @test */
+    public function command_overrides_if_force_is_set_true ()
+    {
+        
+        // fake dir
+        (new Filesystem(new Local(__DIR__ . './../')))
+            ->createDir('dummy-package');
+
+        $commandTester = $this->executeCommand([
+            'name' => 'dummy/dummy-package',
+            '--force' => true
+        ]);
+
+        // the output of the command in the console
+        $output = $commandTester->getDisplay();
+        $this->assertNotContains('dummy-package already exists', $output);
+        $this->assertContains('Generating Laravel Package', $output);
+
+    }
+
 	/** @test */
 	public function command_fails_if_name_not_valid ()
 	{

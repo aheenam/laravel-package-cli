@@ -7,6 +7,7 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
+use Aheenam\LaravelPackageCli\Exceptions\DirectoryAlreadyExistsException;
 
 class PackageGenerator
 {
@@ -24,6 +25,13 @@ class PackageGenerator
      * @var string
      */
     protected $path;
+
+    /**
+     * options for the generator
+     * 
+     * @var array
+     */
+    protected $options;
 
     /**
      * the name of the package
@@ -80,13 +88,21 @@ class PackageGenerator
      * @param FilesystemInterface $filesystem
      * @param string $path
      * @param string $packageName
+     * @param array $options 
      */
-    public function __construct(FilesystemInterface $filesystem, $path = '/', $packageName)
+    public function __construct(FilesystemInterface $filesystem, $path = '/', $packageName, $options = [])
     {
         $this->filesystem = $filesystem;
         $this->path = $path;
+        $this->options = $options;
+
 
         list($this->vendorName, $this->packageName) = $this->resolvePackageName($packageName);
+
+        if ($this->filesystem->has($this->path . $this->packageName) && 
+            (isset($this->options['force']) && !$this->options['force'] || !isset($this->options['force']) )) {
+            throw new DirectoryAlreadyExistsException;
+        }
 
         $this->packagePath = $this->path . $this->packageName . '/';
 

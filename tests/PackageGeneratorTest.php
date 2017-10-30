@@ -32,20 +32,28 @@ class PackageGeneratorTest extends TestCase
 
     }
 
-    /**  */
+    /** @test */
     public function it_throws_exception_if_directory_exists ()
     {
-        $filesystem = new Filesystem(new LocalAdapter(__DIR__ . './../'));
-
-        if (!$filesystem->has('dummy-package')) {
-            $filesystem->createDir('/dummy-package');
-        }
-
         $this->expectException(DirectoryAlreadyExistsException::class);
         $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem->createDir('/dummy-package');
 
-        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package/asdf'))
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generate();
+    }
+
+    /** @test */
+    public function it_overrides_directory_if_force_flag_set ()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem->createDir('/dummy-package');
+
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package', ['force' => true]))
+            ->generate();
+
+        $this->assertTrue($filesystem->has('/dummy-package/composer.json'));
+
     }
 
     /** @test */

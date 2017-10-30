@@ -4,8 +4,8 @@ Todo before first release
 ===
 * ~~Refactor name validation into Generator *(and just catch in Command)*~~
 * Add bin file
-* Add check if directory already exists
-* Add flag to force create
+* ~~Add check if directory already exists~~
+* ~~Add flag to force create~~
 * Write Readme
 
 Laravel Package CLI
