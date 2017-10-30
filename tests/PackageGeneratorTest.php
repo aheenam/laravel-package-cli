@@ -3,15 +3,23 @@ namespace Aheenam\LaravelPackageCli\Test;
 
 use Aheenam\LaravelPackageCli\PackageGenerator;
 use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
 use League\Flysystem\Memory\MemoryAdapter;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
-use Aheenam\LaravelPackageCli\InvalidPackageNameException;
+use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
+use Aheenam\LaravelPackageCli\Exceptions\DirectoryAlreadyExistsException;
 
 class PackageGeneratorTest extends TestCase
 {
 
     use MatchesSnapshots;
+
+    protected function setUp()
+    {
+        (new Filesystem(new Local(__DIR__ . './../')))
+            ->deleteDir('dummy-package');
+    }
 
     /** @test */
     public function it_throws_exception_on_name_validation_fail ()
@@ -22,6 +30,22 @@ class PackageGeneratorTest extends TestCase
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package/asdf'))
             ->generate();
 
+    }
+
+    /**  */
+    public function it_throws_exception_if_directory_exists ()
+    {
+        $filesystem = new Filesystem(new LocalAdapter(__DIR__ . './../'));
+
+        if (!$filesystem->has('dummy-package')) {
+            $filesystem->createDir('/dummy-package');
+        }
+
+        $this->expectException(DirectoryAlreadyExistsException::class);
+        $filesystem = new Filesystem(new MemoryAdapter);
+
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package/asdf'))
+            ->generate();
     }
 
     /** @test */

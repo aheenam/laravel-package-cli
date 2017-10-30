@@ -4,12 +4,20 @@ namespace Aheenam\LaravelPackageCli\Test;
 
 use Aheenam\LaravelPackageCli\GeneratePackageCommand;
 use PHPUnit\Framework\TestCase;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Adapter\Local;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class GeneratePackageCommandTest extends TestCase
 {
+    
+    protected function setUp()
+    {
+        (new Filesystem(new Local(__DIR__ . './../')))
+            ->deleteDir('dummy-package');
+    }
 
     /** @test */
     public function it_executes_command ()

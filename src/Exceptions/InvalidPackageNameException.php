@@ -1,5 +1,5 @@
 <?php
-namespace Aheenam\LaravelPackageCli;
+namespace Aheenam\LaravelPackageCli\Exceptions;
 
 class InvalidPackageNameException extends \Exception
 {

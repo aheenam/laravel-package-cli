@@ -6,6 +6,7 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
+use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
 
 class PackageGenerator
 {
@@ -281,7 +282,7 @@ class PackageGenerator
         $packageParts = explode('/', $packageName);
         
         if ( count($packageParts) !== 2 ) {
-            throw new \Aheenam\LaravelPackageCli\InvalidPackageNameException();
+            throw new InvalidPackageNameException();
         }
 
         return $packageParts;
