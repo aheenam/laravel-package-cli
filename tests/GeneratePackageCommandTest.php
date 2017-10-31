@@ -101,7 +101,7 @@ class GeneratePackageCommandTest extends TestCase
         $application = new Application();
         $application->add(new GeneratePackageCommand());
 
-        $command = $application->find('generate-package');
+        $command = $application->find('generate');
         $commandTester = new CommandTester($command);
         $commandTester->execute(array_merge([
             'command'  => $command->getName(),

@@ -23,7 +23,7 @@ class GeneratePackageCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('generate-package')
+            ->setName('generate')
             ->setDescription('Generate a structure for your Laravel package')
 			->addArgument('name', InputArgument::REQUIRED, 'The name of the package.')
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Overrides existing directories')
