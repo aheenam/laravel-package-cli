@@ -1,37 +1,54 @@
-*Do not use in production yet!*
-
-Todo before first release
-===
-* ~~Refactor name validation into Generator *(and just catch in Command)*~~
-* ~~Add bin file~~
-* ~~Add check if directory already exists~~
-* ~~Add flag to force create~~
-* Write Readme
-
 Laravel Package CLI
 ===
 
 Installation
 ---
-You can install the package via composer:
+Install this command as a global composer package
 
 ```bash
-composer require // add code here
-```
-
-If you are using Laravel in a version < 5.5, the service provider must be registered as a next step:
-
-```php
-// config/app.php
-'providers' => [
-    ...
-    // add code here
-];
+$ composer require --global aheenam/laravel-package-cli
 ```
 
 Usage
 ---
 
+You can then create a new repository by calling the following command:
+
+```bash
+$ laravel-package generate vendor/package-name
+```
+
+This command will create a directory named `package-name` and will setup a basic setup for creating a Laravel package.
+
+The directory structure will look like following:
+
+```bash
+├── database/
+│   ├── .gitkeep
+├── config/
+│   ├── .gitkeep
+├── src/
+│   ├── PackageNameServiceProvider.php
+├── tests/
+│   ├── TestCase.php
+├── .gitignore
+├── CHANGELOG.md
+├── composer.json
+├── LICENSE
+├── phpunit.xml
+├── README.md
+
+```
+
+All the files and classes will have set the correct names and namespaces, but remember that the generator is just creating a starting point. You should go through the files and add stuff that is missing.
+
+### The `--force` option
+
+By default you will get an error notice if a directory with given package name already exists. You can ignore existing directories by using the `--force` flag:
+
+```bash
+$ laravel-package generate vendor/package-name --force
+```
 
 Changelog
 ---
@@ -41,10 +58,19 @@ Testing
 ---
 To run tests use
 
-    $ composer test
+```bash
+$ composer test
+```
+
+If you are working on a windows machine use
+
+```bash
+vendor\bin\phpunit
+```
 
 Contributing
 ---
+*Information will follow soon*
 
 
 Security
@@ -53,6 +79,7 @@ If you discover any security related issues, please email rathes@aheenam.com or 
 
 About
 ---
+Aheenam is a small company from NRW, Germany creating custom digital solutions. Visit [our website](https://aheenam.com) to find out more about us.
 
 License
 ---
