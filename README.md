@@ -1,6 +1,10 @@
 Laravel Package CLI
 ===
 
+This project delivers a simple set of Console Commands to generate a directory structure for laravel package development.
+
+For example simply create the complete directory structure for a new package by calling `laravel-package generate vendor/package-name`
+
 Installation
 ---
 Install this command as a global composer package
