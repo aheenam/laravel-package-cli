@@ -10,7 +10,7 @@ Installation
 Install this command as a global composer package
 
 ```bash
-$ composer require --global aheenam/laravel-package-cli
+$ composer global require aheenam/laravel-package-cli
 ```
 
 Usage
