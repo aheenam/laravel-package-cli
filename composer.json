@@ -1,7 +1,6 @@
 {
   "name": "aheenam/laravel-package-cli",
   "description": "A small CLI to scaffold packages for Laravel framework",
-  "type": "composer-plugin",
   "require": {
     "php": "^7.0",
     "symfony/console": "^3.3",
