@@ -10,7 +10,7 @@ class ConsoleApplication extends Application
      */
     public function __construct()
     {
-        parent::__construct('Laravel Package CLI', '0.1.0');
+        parent::__construct('Laravel Package CLI', '1.0.4');
         $this->add(new GeneratePackageCommand());
     }
 }
