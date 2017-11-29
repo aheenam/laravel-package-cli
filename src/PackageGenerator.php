@@ -138,6 +138,9 @@ class PackageGenerator
         // generate the base files
         $this->generateBaseFiles();
 
+        // generate config file
+        $this->generateConfigFile();
+
         // generate ServiceProvider
         $this->generateServiceProvider();
 
@@ -172,8 +175,23 @@ class PackageGenerator
 
         // generate directories
         $this->filesystem->write($this->packagePath . 'database/.gitkeep', '');
-        $this->filesystem->write($this->packagePath . 'config/.gitkeep', '');
 
+    }
+
+    /**
+     * generates the config file
+     * 
+     * @return void
+     */
+    public function generateConfigFile ()
+    {
+        // copy the stub
+        $this->manager->copy("template://config/config.php.stub",
+            "package://$this->packagePath/config/config.php.stub");
+
+        // rename file
+        $this->filesystem->rename($this->packagePath . 'config/config.php.stub',
+            $this->packagePath . 'config/' . $this->packageName . '.php');
     }
 
     /**

@@ -87,8 +87,21 @@ class PackageGeneratorTest extends TestCase
         $this->assertEquals($templateContent, $contents);
 
         $this->assertHasFile($filesystem, 'dummy-package/database/.gitkeep');
-        $this->assertHasFile($filesystem, 'dummy-package/config/.gitkeep');
 
+    }
+
+    /** @test */
+    public function it_generates_config_file ()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
+            ->generateConfigFile();
+
+        $this->assertHasFile($filesystem, 'dummy-package/config/dummy-package.php');
+        
+        $contents = $filesystem->read('dummy-package/config/dummy-package.php');
+        $this->assertMatchesSnapshot($contents);
     }
 
     /** @test */

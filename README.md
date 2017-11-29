@@ -30,7 +30,7 @@ The directory structure will look like following:
 ├── database/
 │   ├── .gitkeep
 ├── config/
-│   ├── .gitkeep
+│   ├── package-name.php
 ├── src/
 │   ├── PackageNameServiceProvider.php
 ├── tests/
