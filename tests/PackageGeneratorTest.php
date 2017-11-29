@@ -57,6 +57,17 @@ class PackageGeneratorTest extends TestCase
     }
 
     /** @test */
+    public function it_generates_package_on_given_path ()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+
+        (new PackageGenerator($filesystem, './packages/aheenam/', 'dummy/dummy-package'))
+            ->generate();
+
+        $this->assertTrue($filesystem->has('/packages/aheenam/dummy-package/composer.json'));
+    }
+
+    /** @test */
     public function it_generates_base_files ()
     {
         $filesystem = new Filesystem(new MemoryAdapter);

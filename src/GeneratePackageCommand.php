@@ -26,6 +26,7 @@ class GeneratePackageCommand extends Command
             ->setName('generate')
             ->setDescription('Generate a structure for your Laravel package')
 			->addArgument('name', InputArgument::REQUIRED, 'The name of the package.')
+			->addArgument('path', InputArgument::OPTIONAL, 'Path where the package should be created.')
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Overrides existing directories')
             ;
     }
@@ -41,10 +42,11 @@ class GeneratePackageCommand extends Command
 	    $io = new SymfonyStyle($input, $output);
 		
 		$packageName = $input->getArgument('name');
+		$path = $input->hasArgument('path') ? $input->getArgument('path') : '/';
 
 		try {
 			$filesystem = new Filesystem(new Local(getcwd()));
-			$generator = new PackageGenerator($filesystem, '/', $packageName, [
+			$generator = new PackageGenerator($filesystem, $path, $packageName, [
 				'force' => $input->getOption('force')
 			]);
 		} catch (InvalidPackageNameException $e) {

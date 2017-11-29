@@ -12,11 +12,14 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 class GeneratePackageCommandTest extends TestCase
 {
-    
-    protected function setUp()
+
+    protected function tearDown()
     {
         (new Filesystem(new Local(__DIR__ . './../')))
             ->deleteDir('dummy-package');
+
+        (new Filesystem(new Local(__DIR__ . './../')))
+            ->deleteDir('packages');
     }
 
     /** @test */
@@ -88,7 +91,24 @@ class GeneratePackageCommandTest extends TestCase
 		$this->assertContains('dummy/dummy-package/test is not a valid package name', $output);
 		$this->assertNotContains('Generating Laravel Package', $output);
 
-	}
+    }
+    
+    /** @test */
+    public function command_passes_path_to_generator ()
+    { 
+		$commandTester = $this->executeCommand([
+            'name' => 'dummy/dummy-package',
+            'path' => './packages/aheenam/',
+            '--force' => true
+		]);
+        
+        $output = $commandTester->getDisplay();
+        $this->assertContains('Generating Laravel Package', $output);
+        $this->assertTrue(
+            (new Filesystem(new Local(__DIR__ . './../')))
+                ->has('./packages/aheenam/dummy-package/composer.json')
+        );
+    }
 
     /**
      * helper to execute the command for given options

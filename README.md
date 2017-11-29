@@ -46,6 +46,16 @@ The directory structure will look like following:
 
 All the files and classes will have set the correct names and namespaces, but remember that the generator is just creating a starting point. You should go through the files and add stuff that is missing.
 
+### Pass a custom path
+
+You can also pass an second argument specifying the path where the packages should be generated.
+
+```bash
+$ laravel-package generate vendor/package-name packages/aheenam/
+```
+
+Above example would generate the package at `./packages/aheenam/packages-name`. This can be handy if you want to use this generator within an existing Laravel project.
+
 ### The `--force` option
 
 By default you will get an error notice if a directory with given package name already exists. You can ignore existing directories by using the `--force` flag:
