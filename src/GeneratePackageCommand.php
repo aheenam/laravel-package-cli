@@ -28,6 +28,7 @@ class GeneratePackageCommand extends Command
 			->addArgument('name', InputArgument::REQUIRED, 'The name of the package.')
 			->addArgument('path', InputArgument::OPTIONAL, 'Path where the package should be created.')
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Overrides existing directories')
+			->addOption('no-config', null, InputOption::VALUE_NONE, 'Prevents from creating a config directory.')
             ;
     }
 
@@ -47,7 +48,8 @@ class GeneratePackageCommand extends Command
 		try {
 			$filesystem = new Filesystem(new Local(getcwd()));
 			$generator = new PackageGenerator($filesystem, $path, $packageName, [
-				'force' => $input->getOption('force')
+				'force' => $input->getOption('force'),
+				'no-config' => $input->getOption('no-config')
 			]);
 		} catch (InvalidPackageNameException $e) {
 			$io->error("$packageName is not a valid package name");

@@ -105,6 +105,18 @@ class PackageGeneratorTest extends TestCase
     }
 
     /** @test */
+    public function it_does_not_generate_config_file_if_flag_is_set ()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+
+        (new PackageGenerator($filesystem, '/', 'dummy/dummy-package', ['no-config' => true]))
+            ->generateConfigFile();
+            
+        $this->assertFalse($filesystem->has('dummy-package/config/dummy-package.php'));
+
+    }
+
+    /** @test */
     public function it_generates_service_provider ()
     {
         $filesystem = new Filesystem(new MemoryAdapter);

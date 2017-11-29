@@ -95,7 +95,7 @@ class GeneratePackageCommandTest extends TestCase
     
     /** @test */
     public function command_passes_path_to_generator ()
-    { 
+    {
 		$commandTester = $this->executeCommand([
             'name' => 'dummy/dummy-package',
             'path' => './packages/aheenam/',
@@ -108,6 +108,23 @@ class GeneratePackageCommandTest extends TestCase
             (new Filesystem(new Local(__DIR__ . './../')))
                 ->has('./packages/aheenam/dummy-package/composer.json')
         );
+    }
+
+    /** @test */
+    public function command_does_not_create_config_dir_if_flag_set ()
+    {
+		$commandTester = $this->executeCommand([
+            'name' => 'dummy/dummy-package',
+            '--no-config' => true
+		]);
+        
+        $output = $commandTester->getDisplay();
+        $this->assertContains('Generating Laravel Package', $output);
+        $this->assertFalse(
+            (new Filesystem(new Local(__DIR__ . './../')))
+                ->has('./dummy-package/config/dummy-package.php')
+        );
+
     }
 
     /**

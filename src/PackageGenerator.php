@@ -185,6 +185,10 @@ class PackageGenerator
      */
     public function generateConfigFile ()
     {
+
+        // check --no-config flag
+        if (isset($this->options['no-config']) && $this->options['no-config']) return;
+
         // copy the stub
         $this->manager->copy("template://config/config.php.stub",
             "package://$this->packagePath/config/config.php.stub");
