@@ -217,6 +217,10 @@ class PackageGenerator
                 $this->manager->copy("template://license/mit.stub",
                     "package://$this->packagePath/LICENSE.stub");
                 break;
+            case 'apache 2.0':
+                $this->manager->copy("template://license/apache20.stub",
+                    "package://$this->packagePath/LICENSE.stub");
+                break;
             default:
                 return;
         }

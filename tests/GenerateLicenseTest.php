@@ -49,4 +49,20 @@ class GenerateLicenseTest extends TestCase
 
     }
 
+    /** @test */
+    public function it_creates_apache_2_0_license ()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        Carbon::setTestNow(Carbon::create(2002, 5, 21, 12));
+
+        (new PackageGenerator($filesystem, './', 'dummy/dummy-package', ['license' => 'Apache 2.0']))
+            ->generateLicense();
+
+        $this->assertTrue($filesystem->has('/dummy-package/LICENSE'));
+        
+        $licenseContent = $filesystem->read('/dummy-package/LICENSE');
+        $this->assertMatchesSnapshot($licenseContent);
+
+    }
+
 }
