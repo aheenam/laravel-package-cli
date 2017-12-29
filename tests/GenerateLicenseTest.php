@@ -6,6 +6,7 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Memory\MemoryAdapter;
 use Aheenam\LaravelPackageCli\PackageGenerator;
 use Spatie\Snapshots\MatchesSnapshots;
+use Carbon\Carbon;
 
 class GenerateLicenseTest extends TestCase
 {
@@ -30,4 +31,22 @@ class GenerateLicenseTest extends TestCase
         $this->assertTrue($filesystem->has('/dummy-package/LICENSE'));
         $this->assertMatchesSnapshot($filesystem->read('/dummy-package/LICENSE'));
     }
+
+    /** @test */
+    public function it_creates_mit_license ()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        Carbon::setTestNow(Carbon::create(2002, 5, 21, 12));
+
+        (new PackageGenerator($filesystem, './', 'dummy/dummy-package', ['license' => 'MIT']))
+            ->generateLicense();
+
+        $this->assertTrue($filesystem->has('/dummy-package/LICENSE'));
+        
+        $licenseContent = $filesystem->read('/dummy-package/LICENSE');
+        $this->assertMatchesSnapshot($licenseContent);
+        $this->assertContains('Copyright (c) 2002 Dummy', $licenseContent);
+
+    }
+
 }

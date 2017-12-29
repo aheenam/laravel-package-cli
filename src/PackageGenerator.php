@@ -8,6 +8,7 @@ use League\Flysystem\FilesystemInterface;
 use League\Flysystem\MountManager;
 use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
 use Aheenam\LaravelPackageCli\Exceptions\DirectoryAlreadyExistsException;
+use Carbon\Carbon;
 
 class PackageGenerator
 {
@@ -199,6 +200,31 @@ class PackageGenerator
     }
 
     /**
+     * Generates the content of the LICENSE if one is selected
+     */
+    public function generateLicense ()
+    {
+        // check if license is set
+        if (!isset($this->options['license']) || $this->options['license'] === '') return;
+
+        switch (strtolower($this->options['license'])) {
+            case 'mit':
+                $this->manager->copy("template://license/mit.stub",
+                    "package://$this->packagePath/LICENSE.stub");
+                break;
+            default:
+                return;
+        }
+
+        // update files content
+        $this->updateFileContent($this->packagePath . 'LICENSE.stub');
+
+        // rename file
+        $this->filesystem->rename($this->packagePath . 'LICENSE.stub',
+            $this->packagePath . 'LICENSE');
+    }
+
+    /**
      * Creates the service provider
      * 
      * @return void
@@ -300,7 +326,8 @@ class PackageGenerator
             'packageName' => $this->packageName,
             'vendorName' => ucfirst($this->vendorName),
             'fullPackageName' => strtolower($this->vendorName) . '/' . strtolower($this->packageName),
-            'composerNamespace' => ucfirst($this->vendorName) . '\\\\' . $this->kebabToCapitalize($this->packageName)
+            'composerNamespace' => ucfirst($this->vendorName) . '\\\\' . $this->kebabToCapitalize($this->packageName),
+            'currentYear' => Carbon::now()->year
         ];
     }
 
