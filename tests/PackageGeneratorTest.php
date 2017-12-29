@@ -79,7 +79,6 @@ class PackageGeneratorTest extends TestCase
         $this->assertHasFile($filesystem, 'dummy-package/.gitignore');
         $this->assertHasFile($filesystem, 'dummy-package/CHANGELOG.md');
         $this->assertHasFile($filesystem, 'dummy-package/README.md');
-        $this->assertHasFile($filesystem, 'dummy-package/LICENSE');
 
         $contents = $filesystem->read('dummy-package/README.md');
         $templateContent = file_get_contents(__DIR__ . '/../template/README.md.stub');

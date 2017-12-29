@@ -117,7 +117,6 @@ class PackageGenerator
         $this->baseFiles = [
             '.gitignore',
             'CHANGELOG.md',
-            'LICENSE',
             'README.md',
         ];
 
@@ -144,6 +143,9 @@ class PackageGenerator
 
         // generate ServiceProvider
         $this->generateServiceProvider();
+
+        // generate the LICENSE
+        $this->generateLicense();
 
         // generate test based files
         $this->generateTestFiles();
@@ -205,7 +207,10 @@ class PackageGenerator
     public function generateLicense ()
     {
         // check if license is set
-        if (!isset($this->options['license']) || $this->options['license'] === '') return;
+        if (!isset($this->options['license']) || $this->options['license'] === '') {
+            $this->filesystem->write($this->packagePath . 'LICENSE', '');
+            return;
+        };
 
         switch (strtolower($this->options['license'])) {
             case 'mit':

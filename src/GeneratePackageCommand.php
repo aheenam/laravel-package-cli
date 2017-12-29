@@ -27,6 +27,7 @@ class GeneratePackageCommand extends Command
             ->setDescription('Generate a structure for your Laravel package')
 			->addArgument('name', InputArgument::REQUIRED, 'The name of the package.')
 			->addArgument('path', InputArgument::OPTIONAL, 'Path where the package should be created.')
+			->addOption('license', null, InputOption::VALUE_OPTIONAL, 'License that should be generated')
 			->addOption('force', 'f', InputOption::VALUE_NONE, 'Overrides existing directories')
 			->addOption('no-config', null, InputOption::VALUE_NONE, 'Prevents from creating a config directory.')
             ;
@@ -49,7 +50,8 @@ class GeneratePackageCommand extends Command
 			$filesystem = new Filesystem(new Local(getcwd()));
 			$generator = new PackageGenerator($filesystem, $path, $packageName, [
 				'force' => $input->getOption('force'),
-				'no-config' => $input->getOption('no-config')
+				'no-config' => $input->getOption('no-config'),
+				'license' => $input->getOption('license'),
 			]);
 		} catch (InvalidPackageNameException $e) {
 			$io->error("$packageName is not a valid package name");
@@ -60,6 +62,10 @@ class GeneratePackageCommand extends Command
 		}
 
 		$io->title('Generating Laravel Package');
+		if ($input->getOption('license') !== null) {
+			$license = $input->getOption('license');
+			$io->writeln("Added LICENSE $license");
+		}
 		$generator->generate();
 
     }

@@ -9,6 +9,7 @@ use League\Flysystem\Adapter\Local;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
+use Carbon\Carbon;
 
 class GeneratePackageCommandTest extends TestCase
 {
@@ -125,6 +126,25 @@ class GeneratePackageCommandTest extends TestCase
                 ->has('./dummy-package/config/dummy-package.php')
         );
 
+    }
+
+    /** @test */
+    public function command_passes_license_option ()
+    {
+		$commandTester = $this->executeCommand([
+            'name' => 'dummy/dummy-package',
+            '--license' => 'MIT'
+        ]);
+        Carbon::setTestNow(Carbon::create(2002, 5, 21, 12));
+        
+        $output = $commandTester->getDisplay();
+        $this->assertContains('Generating Laravel Package', $output);
+        $this->assertContains('Added LICENSE MIT', $output);
+
+        $filesystem = new Filesystem(new Local(__DIR__ . './../'));
+
+        $this->assertTrue($filesystem->has('./dummy-package/LICENSE'));
+        $this->assertContains('Copyright (c) 2002 Dummy', $filesystem->read('./dummy-package/LICENSE'));
     }
 
     /**
