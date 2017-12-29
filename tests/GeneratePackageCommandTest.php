@@ -1,7 +1,6 @@
 <?php
 namespace Aheenam\LaravelPackageCli\Test;
 
-
 use Aheenam\LaravelPackageCli\GeneratePackageCommand;
 use PHPUnit\Framework\TestCase;
 use League\Flysystem\Filesystem;
@@ -13,7 +12,6 @@ use Carbon\Carbon;
 
 class GeneratePackageCommandTest extends TestCase
 {
-
     protected function tearDown()
     {
         (new Filesystem(new Local(__DIR__ . './../')))
@@ -24,9 +22,8 @@ class GeneratePackageCommandTest extends TestCase
     }
 
     /** @test */
-    public function it_executes_command ()
+    public function it_executes_command()
     {
-
         $commandTester = $this->executeCommand([
             'name' => 'dummy/dummy-package'
         ]);
@@ -37,14 +34,14 @@ class GeneratePackageCommandTest extends TestCase
     }
 
     /** @test */
-    public function command_fails_if_no_name_was_provided ()
+    public function command_fails_if_no_name_was_provided()
     {
         $this->expectException(RuntimeException::class);
         $this->executeCommand([]);
     }
 
     /** @test */
-    public function command_fails_if_directory_already_exists ()
+    public function command_fails_if_directory_already_exists()
     {
 
         // fake dir
@@ -57,12 +54,12 @@ class GeneratePackageCommandTest extends TestCase
 
         // the output of the command in the console
         $output = $commandTester->getDisplay();
-		$this->assertContains('dummy-package already exists', $output);
-		$this->assertNotContains('Generating Laravel Package', $output);
+        $this->assertContains('dummy-package already exists', $output);
+        $this->assertNotContains('Generating Laravel Package', $output);
     }
 
     /** @test */
-    public function command_overrides_if_force_is_set_true ()
+    public function command_overrides_if_force_is_set_true()
     {
         
         // fake dir
@@ -78,30 +75,28 @@ class GeneratePackageCommandTest extends TestCase
         $output = $commandTester->getDisplay();
         $this->assertNotContains('dummy-package already exists', $output);
         $this->assertContains('Generating Laravel Package', $output);
-
     }
 
-	/** @test */
-	public function command_fails_if_name_not_valid ()
-	{
-		$commandTester = $this->executeCommand([
-			'name' => 'dummy/dummy-package/test'
-		]);
+    /** @test */
+    public function command_fails_if_name_not_valid()
+    {
+        $commandTester = $this->executeCommand([
+            'name' => 'dummy/dummy-package/test'
+        ]);
 
-		$output = $commandTester->getDisplay();
-		$this->assertContains('dummy/dummy-package/test is not a valid package name', $output);
-		$this->assertNotContains('Generating Laravel Package', $output);
-
+        $output = $commandTester->getDisplay();
+        $this->assertContains('dummy/dummy-package/test is not a valid package name', $output);
+        $this->assertNotContains('Generating Laravel Package', $output);
     }
     
     /** @test */
-    public function command_passes_path_to_generator ()
+    public function command_passes_path_to_generator()
     {
-		$commandTester = $this->executeCommand([
+        $commandTester = $this->executeCommand([
             'name' => 'dummy/dummy-package',
             'path' => './packages/aheenam/',
             '--force' => true
-		]);
+        ]);
         
         $output = $commandTester->getDisplay();
         $this->assertContains('Generating Laravel Package', $output);
@@ -112,12 +107,12 @@ class GeneratePackageCommandTest extends TestCase
     }
 
     /** @test */
-    public function command_does_not_create_config_dir_if_flag_set ()
+    public function command_does_not_create_config_dir_if_flag_set()
     {
-		$commandTester = $this->executeCommand([
+        $commandTester = $this->executeCommand([
             'name' => 'dummy/dummy-package',
             '--no-config' => true
-		]);
+        ]);
         
         $output = $commandTester->getDisplay();
         $this->assertContains('Generating Laravel Package', $output);
@@ -125,13 +120,12 @@ class GeneratePackageCommandTest extends TestCase
             (new Filesystem(new Local(__DIR__ . './../')))
                 ->has('./dummy-package/config/dummy-package.php')
         );
-
     }
 
     /** @test */
-    public function command_passes_license_option ()
+    public function command_passes_license_option()
     {
-		$commandTester = $this->executeCommand([
+        $commandTester = $this->executeCommand([
             'name' => 'dummy/dummy-package',
             '--license' => 'MIT'
         ]);
@@ -153,7 +147,7 @@ class GeneratePackageCommandTest extends TestCase
      * @param $options array
      * @return CommandTester
      */
-    protected function executeCommand ($options)
+    protected function executeCommand($options)
     {
         $application = new Application();
         $application->add(new GeneratePackageCommand());
@@ -165,7 +159,5 @@ class GeneratePackageCommandTest extends TestCase
         ], $options));
 
         return $commandTester;
-
     }
-
 }

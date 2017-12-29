@@ -29,7 +29,7 @@ class PackageGenerator
 
     /**
      * options for the generator
-     * 
+     *
      * @var array
      */
     protected $options;
@@ -89,7 +89,7 @@ class PackageGenerator
      * @param FilesystemInterface $filesystem
      * @param string $path
      * @param string $packageName
-     * @param array $options 
+     * @param array $options
      */
     public function __construct(FilesystemInterface $filesystem, $path = '/', $packageName, $options = [])
     {
@@ -100,8 +100,8 @@ class PackageGenerator
 
         list($this->vendorName, $this->packageName) = $this->resolvePackageName($packageName);
 
-        if ($this->filesystem->has($this->path . $this->packageName) && 
-            (isset($this->options['force']) && !$this->options['force'] || !isset($this->options['force']) )) {
+        if ($this->filesystem->has($this->path . $this->packageName) &&
+            (isset($this->options['force']) && !$this->options['force'] || !isset($this->options['force']))) {
             throw new DirectoryAlreadyExistsException;
         }
 
@@ -122,7 +122,6 @@ class PackageGenerator
 
         // create package info
         $this->packageInformation = $this->buildPackageInformation();
-
     }
 
     /**
@@ -151,8 +150,7 @@ class PackageGenerator
         $this->generateTestFiles();
 
         // generate composer.json
-	    $this->generateComposerJson();
-
+        $this->generateComposerJson();
     }
 
     /**
@@ -161,7 +159,7 @@ class PackageGenerator
      *
      * @return void
      */
-    public function generateBaseFiles ()
+    public function generateBaseFiles()
     {
 
         // copy base files stubs and edit them properly
@@ -178,33 +176,38 @@ class PackageGenerator
 
         // generate directories
         $this->filesystem->write($this->packagePath . 'database/.gitkeep', '');
-
     }
 
     /**
      * generates the config file
-     * 
+     *
      * @return void
      */
-    public function generateConfigFile ()
+    public function generateConfigFile()
     {
 
         // check --no-config flag
-        if (isset($this->options['no-config']) && $this->options['no-config']) return;
+        if (isset($this->options['no-config']) && $this->options['no-config']) {
+            return;
+        }
 
         // copy the stub
-        $this->manager->copy("template://config/config.php.stub",
-            "package://$this->packagePath/config/config.php.stub");
+        $this->manager->copy(
+            "template://config/config.php.stub",
+            "package://$this->packagePath/config/config.php.stub"
+        );
 
         // rename file
-        $this->filesystem->rename($this->packagePath . 'config/config.php.stub',
-            $this->packagePath . 'config/' . $this->packageName . '.php');
+        $this->filesystem->rename(
+            $this->packagePath . 'config/config.php.stub',
+            $this->packagePath . 'config/' . $this->packageName . '.php'
+        );
     }
 
     /**
      * Generates the content of the LICENSE if one is selected
      */
-    public function generateLicense ()
+    public function generateLicense()
     {
         // check if license is set
         if (!isset($this->options['license']) || $this->options['license'] === '') {
@@ -214,16 +217,22 @@ class PackageGenerator
 
         switch (strtolower($this->options['license'])) {
             case 'mit':
-                $this->manager->copy("template://license/mit.stub",
-                    "package://$this->packagePath/LICENSE.stub");
+                $this->manager->copy(
+                    "template://license/mit.stub",
+                    "package://$this->packagePath/LICENSE.stub"
+                );
                 break;
             case 'apache 2.0':
-                $this->manager->copy("template://license/apache20.stub",
-                    "package://$this->packagePath/LICENSE.stub");
+                $this->manager->copy(
+                    "template://license/apache20.stub",
+                    "package://$this->packagePath/LICENSE.stub"
+                );
                 break;
             case 'gnu gpl v3':
-                $this->manager->copy("template://license/gnu_gpl_v3.stub",
-                    "package://$this->packagePath/LICENSE.stub");
+                $this->manager->copy(
+                    "template://license/gnu_gpl_v3.stub",
+                    "package://$this->packagePath/LICENSE.stub"
+                );
                 break;
             default:
                 return;
@@ -233,33 +242,38 @@ class PackageGenerator
         $this->updateFileContent($this->packagePath . 'LICENSE.stub');
 
         // rename file
-        $this->filesystem->rename($this->packagePath . 'LICENSE.stub',
-            $this->packagePath . 'LICENSE');
+        $this->filesystem->rename(
+            $this->packagePath . 'LICENSE.stub',
+            $this->packagePath . 'LICENSE'
+        );
     }
 
     /**
      * Creates the service provider
-     * 
+     *
      * @return void
      */
-    public function generateServiceProvider ()
+    public function generateServiceProvider()
     {
         // copy the stub
-        $this->manager->copy("template://src/PackageServiceProvider.php.stub",
-            "package://$this->packagePath/src/PackageServiceProvider.php.stub");
+        $this->manager->copy(
+            "template://src/PackageServiceProvider.php.stub",
+            "package://$this->packagePath/src/PackageServiceProvider.php.stub"
+        );
 
         // update files content
         $this->updateFileContent("{$this->packagePath}/src/PackageServiceProvider.php.stub");
 
         // rename file
-        $this->filesystem->rename($this->packagePath . 'src/PackageServiceProvider.php.stub',
-            $this->packagePath . 'src/' . $this->packageInformation['serviceProvider'] . '.php');
-
+        $this->filesystem->rename(
+            $this->packagePath . 'src/PackageServiceProvider.php.stub',
+            $this->packagePath . 'src/' . $this->packageInformation['serviceProvider'] . '.php'
+        );
     }
 
     /**
      * Creates the files for testing purposes
-     * 
+     *
      * @return void
      */
     public function generateTestFiles()
@@ -267,42 +281,52 @@ class PackageGenerator
         $this->filesystem->createDir($this->packagePath . 'tests');
 
         // copy the stubs
-        $this->manager->copy("template://tests/TestCase.php.stub",
-            "package://$this->packagePath/tests/TestCase.php.stub");
-        $this->manager->copy("template://phpunit.xml.stub",
-            "package://$this->packagePath/phpunit.xml.stub");
+        $this->manager->copy(
+            "template://tests/TestCase.php.stub",
+            "package://$this->packagePath/tests/TestCase.php.stub"
+        );
+        $this->manager->copy(
+            "template://phpunit.xml.stub",
+            "package://$this->packagePath/phpunit.xml.stub"
+        );
 
         // update file contents
         $this->updateFileContent("{$this->packagePath}/tests/TestCase.php.stub");
         $this->updateFileContent("{$this->packagePath}/phpunit.xml.stub");
 
         // rename files
-        $this->filesystem->rename($this->packagePath . 'tests/TestCase.php.stub',
-            $this->packagePath . 'tests/TestCase.php');
+        $this->filesystem->rename(
+            $this->packagePath . 'tests/TestCase.php.stub',
+            $this->packagePath . 'tests/TestCase.php'
+        );
 
-        $this->filesystem->rename($this->packagePath . 'phpunit.xml.stub',
-            $this->packagePath . 'phpunit.xml');
-
+        $this->filesystem->rename(
+            $this->packagePath . 'phpunit.xml.stub',
+            $this->packagePath . 'phpunit.xml'
+        );
     }
 
     /**
      * Create the composer.json file
-     * 
+     *
      * @return void
      */
     public function generateComposerJson()
     {
         // copy the stub
-        $this->manager->copy("template://composer.json.stub",
-            "package://$this->packagePath/composer.json.stub");
+        $this->manager->copy(
+            "template://composer.json.stub",
+            "package://$this->packagePath/composer.json.stub"
+        );
 
         // update file contents
         $this->updateFileContent("{$this->packagePath}/composer.json.stub");
 
         // rename files
-        $this->filesystem->rename($this->packagePath . 'composer.json.stub',
-            $this->packagePath . 'composer.json');
-
+        $this->filesystem->rename(
+            $this->packagePath . 'composer.json.stub',
+            $this->packagePath . 'composer.json'
+        );
     }
 
     /**
@@ -328,9 +352,8 @@ class PackageGenerator
      *
      * @return array
      */
-    protected function buildPackageInformation ()
+    protected function buildPackageInformation()
     {
-
         $serviceProviderName = $this->kebabToCapitalize($this->packageName) . 'ServiceProvider';
 
         return [
@@ -356,26 +379,25 @@ class PackageGenerator
             ucwords(
                 str_replace(
                     '-',
-                    ' ', $string
+                    ' ',
+                    $string
                 )
             )
         );
-
     }
 
     /**
      * @param string $packageName
-     * @return array 
+     * @return array
      */
-    protected function resolvePackageName($packageName) 
+    protected function resolvePackageName($packageName)
     {
         $packageParts = explode('/', $packageName);
         
-        if ( count($packageParts) !== 2 ) {
+        if (count($packageParts) !== 2) {
             throw new InvalidPackageNameException();
         }
 
         return $packageParts;
     }
-
 }
