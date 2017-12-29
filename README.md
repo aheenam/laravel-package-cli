@@ -64,6 +64,16 @@ By default you will get an error notice if a directory with given package name a
 $ laravel-package generate vendor/package-name --force
 ```
 
+### Generate a LICENSE
+
+You can pass an option to not only create an empty LICENSE file, but also populate it with the appropriate LICENSE content.
+
+```bash
+$ laravel-package generate vendor/package-name --license=MIT
+```
+
+Currently there are 3 LICENSE types implemented: `MIT`, `Apache 2.0` and `GNU GPL v3`. Just pass the names and you should get your LICENSE generated.
+
 Changelog
 ---
 Check [CHANGELOG](CHANGELOG.md) for the changelog
