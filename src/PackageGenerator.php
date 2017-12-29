@@ -221,6 +221,10 @@ class PackageGenerator
                 $this->manager->copy("template://license/apache20.stub",
                     "package://$this->packagePath/LICENSE.stub");
                 break;
+            case 'gnu gpl v3':
+                $this->manager->copy("template://license/gnu_gpl_v3.stub",
+                    "package://$this->packagePath/LICENSE.stub");
+                break;
             default:
                 return;
         }

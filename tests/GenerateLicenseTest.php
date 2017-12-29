@@ -65,4 +65,20 @@ class GenerateLicenseTest extends TestCase
 
     }
 
+    /** @test */
+    public function it_creates_gnu_gpl_v_3_license ()
+    {
+        $filesystem = new Filesystem(new MemoryAdapter);
+        Carbon::setTestNow(Carbon::create(2002, 5, 21, 12));
+
+        (new PackageGenerator($filesystem, './', 'dummy/dummy-package', ['license' => 'GNU GPL v3']))
+            ->generateLicense();
+
+        $this->assertTrue($filesystem->has('/dummy-package/LICENSE'));
+        
+        $licenseContent = $filesystem->read('/dummy-package/LICENSE');
+        $this->assertMatchesSnapshot($licenseContent);
+
+    }
+
 }
