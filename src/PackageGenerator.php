@@ -200,6 +200,8 @@ class PackageGenerator
 
     /**
      * Creates the service provider
+     * 
+     * @return void
      */
     public function generateServiceProvider ()
     {
@@ -216,6 +218,11 @@ class PackageGenerator
 
     }
 
+    /**
+     * Creates the files for testing purposes
+     * 
+     * @return void
+     */
     public function generateTestFiles()
     {
         $this->filesystem->createDir($this->packagePath . 'tests');
@@ -239,6 +246,11 @@ class PackageGenerator
 
     }
 
+    /**
+     * Create the composer.json file
+     * 
+     * @return void
+     */
     public function generateComposerJson()
     {
         // copy the stub
