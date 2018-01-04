@@ -1,4 +1,6 @@
-<?php return 'MIT License
+<?php
+
+return 'MIT License
 
 Copyright (c) 2002 Dummy
 

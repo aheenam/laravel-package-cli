@@ -1,22 +1,22 @@
 <?php
+
 namespace Aheenam\LaravelPackageCli;
 
+use Aheenam\LaravelPackageCli\Exceptions\DirectoryAlreadyExistsException;
+use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
-use Aheenam\LaravelPackageCli\Exceptions\DirectoryAlreadyExistsException;
 
 class GeneratePackageCommand extends Command
 {
-
     /**
-     * Configure the command
+     * Configure the command.
      *
      * @return void
      */
@@ -29,12 +29,11 @@ class GeneratePackageCommand extends Command
             ->addArgument('path', InputArgument::OPTIONAL, 'Path where the package should be created.')
             ->addOption('license', null, InputOption::VALUE_OPTIONAL, 'License that should be generated')
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Overrides existing directories')
-            ->addOption('no-config', null, InputOption::VALUE_NONE, 'Prevents from creating a config directory.')
-            ;
+            ->addOption('no-config', null, InputOption::VALUE_NONE, 'Prevents from creating a config directory.');
     }
 
     /**
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      *
      * @return int|null|void
@@ -42,23 +41,25 @@ class GeneratePackageCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        
+
         $packageName = $input->getArgument('name');
         $path = $input->hasArgument('path') ? $input->getArgument('path') : '/';
 
         try {
             $filesystem = new Filesystem(new Local(getcwd()));
             $generator = new PackageGenerator($filesystem, $path, $packageName, [
-                'force' => $input->getOption('force'),
+                'force'     => $input->getOption('force'),
                 'no-config' => $input->getOption('no-config'),
-                'license' => $input->getOption('license'),
+                'license'   => $input->getOption('license'),
             ]);
         } catch (InvalidPackageNameException $e) {
             $io->error("$packageName is not a valid package name");
-            return null;
+
+            return;
         } catch (DirectoryAlreadyExistsException $e) {
-            $io->error(explode('/', $packageName)[1] . " already exists.");
-            return null;
+            $io->error(explode('/', $packageName)[1].' already exists.');
+
+            return;
         }
 
         $io->title('Generating Laravel Package');

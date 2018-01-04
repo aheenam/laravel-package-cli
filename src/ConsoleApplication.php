@@ -1,4 +1,5 @@
 <?php
+
 namespace Aheenam\LaravelPackageCli;
 
 use Symfony\Component\Console\Application;

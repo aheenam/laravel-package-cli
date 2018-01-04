@@ -1,15 +1,15 @@
 <?php
+
 namespace Aheenam\LaravelPackageCli\Exceptions;
 
 class DirectoryAlreadyExistsException extends \Exception
 {
-    
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
-        $message = "An directory with this name already exists.";
+        $message = 'An directory with this name already exists.';
         parent::__construct($message);
     }
 }
