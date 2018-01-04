@@ -1,14 +1,15 @@
 <?php
+
 namespace Aheenam\LaravelPackageCli\Test;
 
+use Aheenam\LaravelPackageCli\Exceptions\DirectoryAlreadyExistsException;
+use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
 use Aheenam\LaravelPackageCli\PackageGenerator;
-use League\Flysystem\Filesystem;
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use League\Flysystem\Memory\MemoryAdapter;
 use PHPUnit\Framework\TestCase;
 use Spatie\Snapshots\MatchesSnapshots;
-use Aheenam\LaravelPackageCli\Exceptions\InvalidPackageNameException;
-use Aheenam\LaravelPackageCli\Exceptions\DirectoryAlreadyExistsException;
 
 class PackageGeneratorTest extends TestCase
 {
@@ -16,7 +17,7 @@ class PackageGeneratorTest extends TestCase
 
     protected function setUp()
     {
-        (new Filesystem(new Local(__DIR__ . './../')))
+        (new Filesystem(new Local(__DIR__.'./../')))
             ->deleteDir('dummy-package');
     }
 
@@ -24,7 +25,7 @@ class PackageGeneratorTest extends TestCase
     public function it_throws_exception_on_name_validation_fail()
     {
         $this->expectException(InvalidPackageNameException::class);
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package/asdf'))
             ->generate();
@@ -34,7 +35,7 @@ class PackageGeneratorTest extends TestCase
     public function it_throws_exception_if_directory_exists()
     {
         $this->expectException(DirectoryAlreadyExistsException::class);
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
         $filesystem->createDir('/dummy-package');
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
@@ -44,7 +45,7 @@ class PackageGeneratorTest extends TestCase
     /** @test */
     public function it_overrides_directory_if_force_flag_set()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
         $filesystem->createDir('/dummy-package');
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package', ['force' => true]))
@@ -56,7 +57,7 @@ class PackageGeneratorTest extends TestCase
     /** @test */
     public function it_generates_package_on_given_path()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, './packages/aheenam/', 'dummy/dummy-package'))
             ->generate();
@@ -67,7 +68,7 @@ class PackageGeneratorTest extends TestCase
     /** @test */
     public function it_generates_base_files()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateBaseFiles();
@@ -78,7 +79,7 @@ class PackageGeneratorTest extends TestCase
         $this->assertHasFile($filesystem, 'dummy-package/README.md');
 
         $contents = $filesystem->read('dummy-package/README.md');
-        $templateContent = file_get_contents(__DIR__ . '/../template/README.md.stub');
+        $templateContent = file_get_contents(__DIR__.'/../template/README.md.stub');
         $templateContent = str_replace('${packageName}', 'dummy-package', $templateContent);
         $this->assertEquals($templateContent, $contents);
 
@@ -88,13 +89,13 @@ class PackageGeneratorTest extends TestCase
     /** @test */
     public function it_generates_config_file()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateConfigFile();
 
         $this->assertHasFile($filesystem, 'dummy-package/config/dummy-package.php');
-        
+
         $contents = $filesystem->read('dummy-package/config/dummy-package.php');
         $this->assertMatchesSnapshot($contents);
     }
@@ -102,18 +103,18 @@ class PackageGeneratorTest extends TestCase
     /** @test */
     public function it_does_not_generate_config_file_if_flag_is_set()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package', ['no-config' => true]))
             ->generateConfigFile();
-            
+
         $this->assertFalse($filesystem->has('dummy-package/config/dummy-package.php'));
     }
 
     /** @test */
     public function it_generates_service_provider()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateServiceProvider();
@@ -127,7 +128,7 @@ class PackageGeneratorTest extends TestCase
     /** @test */
     public function it_generates_test_files()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateTestFiles();
@@ -147,7 +148,7 @@ class PackageGeneratorTest extends TestCase
     /** @test */
     public function it_generates_composer_json()
     {
-        $filesystem = new Filesystem(new MemoryAdapter);
+        $filesystem = new Filesystem(new MemoryAdapter());
 
         (new PackageGenerator($filesystem, '/', 'dummy/dummy-package'))
             ->generateComposerJson();
@@ -165,7 +166,7 @@ class PackageGeneratorTest extends TestCase
 
     /**
      * @param Filesystem $filesystem
-     * @param string $file
+     * @param string     $file
      */
     protected function assertHasFile(Filesystem $filesystem, $file)
     {
