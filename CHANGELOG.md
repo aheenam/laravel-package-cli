@@ -3,6 +3,14 @@ CHANGELOG
 
 This changelog contains all notable change of this project
 
+1.2.0
+---
+
+### Changes
+
+- the template drops support for Laravel 5.4 and adds support for Laravel 5.6
+- the components are now running with Symfony 4 components
+
 1.1.0
 ---
 
