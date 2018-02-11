@@ -3,13 +3,13 @@
   "description": "A small CLI to scaffold packages for Laravel framework",
   "require": {
     "php": "^7.0",
-    "symfony/console": "^3.3",
-    "symfony/var-dumper": "^3.3",
+    "symfony/console": "^4.0",
+    "symfony/var-dumper": "^4.0",
     "league/flysystem": "^1.0",
     "nesbot/carbon": "^1.22"
   },
   "require-dev": {
-    "phpunit/phpunit": "^6.4",
+    "phpunit/phpunit": "^7.0",
     "league/flysystem-memory": "^1.0",
     "spatie/phpunit-snapshot-assertions": "^1.1"
   },
