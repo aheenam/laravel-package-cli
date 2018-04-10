@@ -15,10 +15,10 @@ class GeneratePackageCommandTest extends TestCase
 {
     protected function tearDown()
     {
-        (new Filesystem(new Local(__DIR__.'./../')))
+        (new Filesystem(new Local(__DIR__.'/../')))
             ->deleteDir('dummy-package');
 
-        (new Filesystem(new Local(__DIR__.'./../')))
+        (new Filesystem(new Local(__DIR__.'/../')))
             ->deleteDir('packages');
     }
 
@@ -46,7 +46,7 @@ class GeneratePackageCommandTest extends TestCase
     {
 
         // fake dir
-        (new Filesystem(new Local(__DIR__.'./../')))
+        (new Filesystem(new Local(__DIR__.'/../')))
             ->createDir('dummy-package');
 
         $commandTester = $this->executeCommand([
@@ -64,7 +64,7 @@ class GeneratePackageCommandTest extends TestCase
     {
 
         // fake dir
-        (new Filesystem(new Local(__DIR__.'./../')))
+        (new Filesystem(new Local(__DIR__.'/../')))
             ->createDir('dummy-package');
 
         $commandTester = $this->executeCommand([
@@ -102,8 +102,8 @@ class GeneratePackageCommandTest extends TestCase
         $output = $commandTester->getDisplay();
         $this->assertContains('Generating Laravel Package', $output);
         $this->assertTrue(
-            (new Filesystem(new Local(__DIR__.'./../')))
-                ->has('./packages/aheenam/dummy-package/composer.json')
+            (new Filesystem(new Local(__DIR__.'/../')))
+                ->has('/packages/aheenam/dummy-package/composer.json')
         );
     }
 
@@ -118,27 +118,28 @@ class GeneratePackageCommandTest extends TestCase
         $output = $commandTester->getDisplay();
         $this->assertContains('Generating Laravel Package', $output);
         $this->assertFalse(
-            (new Filesystem(new Local(__DIR__.'./../')))
-                ->has('./dummy-package/config/dummy-package.php')
+            (new Filesystem(new Local(__DIR__.'/../')))
+                ->has('/dummy-package/config/dummy-package.php')
         );
     }
 
     /** @test */
     public function command_passes_license_option()
     {
+        Carbon::setTestNow(Carbon::create(2002, 5, 21, 12));
+
         $commandTester = $this->executeCommand([
             'name'      => 'dummy/dummy-package',
             '--license' => 'MIT',
         ]);
-        Carbon::setTestNow(Carbon::create(2002, 5, 21, 12));
 
         $output = $commandTester->getDisplay();
         $this->assertContains('Generating Laravel Package', $output);
         $this->assertContains('Added LICENSE MIT', $output);
 
-        $filesystem = new Filesystem(new Local(__DIR__.'./../'));
+        $filesystem = new Filesystem(new Local(__DIR__.'/../'));
 
-        $this->assertTrue($filesystem->has('./dummy-package/LICENSE'));
+        $this->assertTrue($filesystem->has('/dummy-package/LICENSE'));
         $this->assertContains('Copyright (c) 2002 Dummy', $filesystem->read('./dummy-package/LICENSE'));
     }
 

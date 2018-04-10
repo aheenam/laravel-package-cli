@@ -16,7 +16,7 @@ class GenerateLicenseTest extends TestCase
 
     protected function setUp()
     {
-        (new Filesystem(new Local(__DIR__.'./../')))
+        (new Filesystem(new Local(__DIR__.'/../')))
             ->deleteDir('dummy-package');
     }
 
