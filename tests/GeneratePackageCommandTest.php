@@ -153,7 +153,6 @@ class GeneratePackageCommandTest extends TestCase
             '--install' => true,
         ]);
 
-        $output = $commandTester->getDisplay();
         $this->assertTrue(
             (new Filesystem(new Local(__DIR__.'/../')))
                 ->has('/packages/aheenam/dummy-package/vendor/')
