@@ -159,6 +159,20 @@ class GeneratePackageCommandTest extends TestCase
             );
     }
 
+    /** @test */
+    public function command_does_not_run_install_process_when_flag_not_passed()
+    {
+        $commandTester = $this->executeCommand([
+            'name'      => 'dummy/dummy-package',
+            'path'      => './packages/aheenam/',
+        ]);
+
+        $this->assertFalse(
+            (new Filesystem(new Local(__DIR__.'/../')))
+                ->has('/packages/aheenam/dummy-package/vendor/')
+            );
+    }
+
     /**
      * helper to execute the command for given options.
      *
