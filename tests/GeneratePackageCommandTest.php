@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
+use Aheenam\LaravelPackageCli\Process;
 
 class GeneratePackageCommandTest extends TestCase
 {
@@ -141,6 +142,22 @@ class GeneratePackageCommandTest extends TestCase
 
         $this->assertTrue($filesystem->has('/dummy-package/LICENSE'));
         $this->assertContains('Copyright (c) 2002 Dummy', $filesystem->read('./dummy-package/LICENSE'));
+    }
+
+    /** @test */
+    public function command_runs_install_process_when_flag_passed()
+    {
+        $commandTester = $this->executeCommand([
+            'name'      => 'dummy/dummy-package',
+            'path'      => './packages/aheenam/',
+            '--install' => true,
+        ]);
+
+        $output = $commandTester->getDisplay();
+        $this->assertTrue(
+            (new Filesystem(new Local(__DIR__.'/../')))
+                ->has('/packages/aheenam/dummy-package/vendor/')
+            );
     }
 
     /**
