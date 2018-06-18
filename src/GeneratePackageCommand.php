@@ -73,7 +73,7 @@ class GeneratePackageCommand extends Command
         $generator->generate();
 
         if ($input->getOption('install')) {
-            (new Process)->run("cd $path/$projectName; composer install");
+            (new Process())->run("cd $path/$projectName; composer install");
         }
     }
 }

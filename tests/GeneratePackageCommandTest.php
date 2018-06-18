@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Tester\CommandTester;
-use Aheenam\LaravelPackageCli\Process;
 
 class GeneratePackageCommandTest extends TestCase
 {
