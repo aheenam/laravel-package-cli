@@ -64,6 +64,10 @@ By default you will get an error notice if a directory with given package name a
 $ laravel-package generate vendor/package-name --force
 ```
 
+### Install composer dependecies
+
+Using the `--install` flag, you can enforce that, after the generation of the package is done, the command changes into the new directory and runs `composer install` to install the dependecies.
+
 ### Generate a LICENSE
 
 You can pass an option to not only create an empty LICENSE file, but also populate it with the appropriate LICENSE content.
