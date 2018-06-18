@@ -143,6 +143,35 @@ class GeneratePackageCommandTest extends TestCase
         $this->assertContains('Copyright (c) 2002 Dummy', $filesystem->read('./dummy-package/LICENSE'));
     }
 
+    /** @test */
+    public function command_runs_install_process_when_flag_passed()
+    {
+        $commandTester = $this->executeCommand([
+            'name'      => 'dummy/dummy-package',
+            'path'      => './packages/aheenam/',
+            '--install' => true,
+        ]);
+
+        $this->assertTrue(
+            (new Filesystem(new Local(__DIR__.'/../')))
+                ->has('/packages/aheenam/dummy-package/vendor/')
+            );
+    }
+
+    /** @test */
+    public function command_does_not_run_install_process_when_flag_not_passed()
+    {
+        $commandTester = $this->executeCommand([
+            'name'      => 'dummy/dummy-package',
+            'path'      => './packages/aheenam/',
+        ]);
+
+        $this->assertFalse(
+            (new Filesystem(new Local(__DIR__.'/../')))
+                ->has('/packages/aheenam/dummy-package/vendor/')
+            );
+    }
+
     /**
      * helper to execute the command for given options.
      *
