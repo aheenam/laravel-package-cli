@@ -29,7 +29,8 @@ class GeneratePackageCommand extends Command
             ->addArgument('path', InputArgument::OPTIONAL, 'Path where the package should be created.')
             ->addOption('license', null, InputOption::VALUE_OPTIONAL, 'License that should be generated')
             ->addOption('force', 'f', InputOption::VALUE_NONE, 'Overrides existing directories')
-            ->addOption('no-config', null, InputOption::VALUE_NONE, 'Prevents from creating a config directory.');
+            ->addOption('no-config', null, InputOption::VALUE_NONE, 'Prevents from creating a config directory.')
+            ->addOption('install', null, InputOption::VALUE_NONE, 'Run composer install after generating the package.');
     }
 
     /**
@@ -45,6 +46,8 @@ class GeneratePackageCommand extends Command
         $packageName = $input->getArgument('name');
         $path = $input->hasArgument('path') ? $input->getArgument('path') : '/';
 
+        $projectName = explode('/', $packageName)[1];
+
         try {
             $filesystem = new Filesystem(new Local(getcwd()));
             $generator = new PackageGenerator($filesystem, $path, $packageName, [
@@ -57,7 +60,7 @@ class GeneratePackageCommand extends Command
 
             return;
         } catch (DirectoryAlreadyExistsException $e) {
-            $io->error(explode('/', $packageName)[1].' already exists.');
+            $io->error($projectName.' already exists.');
 
             return;
         }
@@ -68,5 +71,9 @@ class GeneratePackageCommand extends Command
             $io->writeln("Added LICENSE $license");
         }
         $generator->generate();
+
+        if ($input->getOption('install')) {
+            (new Process)->run("cd $path/$projectName; composer install");
+        }
     }
 }
